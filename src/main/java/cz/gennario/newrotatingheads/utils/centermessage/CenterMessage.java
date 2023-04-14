@@ -14,13 +14,9 @@ public final class CenterMessage {
         for (char c : message.toCharArray()) {
             if (c == '§') {
                 previousCode = true;
-                continue;
-            } else if (previousCode == true) {
+            } else if (previousCode) {
                 previousCode = false;
-                if (c == 'l' || c == 'L') {
-                    isBold = true;
-                    continue;
-                } else isBold = false;
+                isBold = c == 'l' || c == 'L';
             } else {
                 DefaultFontInfo dFI = DefaultFontInfo.getDefaultFontInfo(c);
                 messagePxSize += isBold ? dFI.getBoldLength() : dFI.getLength();
@@ -37,7 +33,7 @@ public final class CenterMessage {
             sb.append(" ");
             compensated += spaceLength;
         }
-        return (sb.toString() + message);
+        return (sb + message);
     }
 
 }

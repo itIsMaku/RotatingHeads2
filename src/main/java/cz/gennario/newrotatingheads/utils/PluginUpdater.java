@@ -81,7 +81,7 @@ public class PluginUpdater {
         Main.getInstance().getLogger().log(Level.WARNING, "An error occurred while loading the plugin: " + message);
         Main.getInstance().getLogger().log(Level.WARNING, "Disabling plugin...");
         Main.getInstance().getLogger().log(Level.WARNING, "");
-        Main.getInstance().getLogger().log(Level.WARNING, "Thanks for choosing " + "Gennario's Development" + "...");
+        Main.getInstance().getLogger().log(Level.WARNING, "Thanks for choosing Gennario's Development...");
         Main.getInstance().getLogger().log(Level.WARNING, "--------------------------------------------------------------------------------------------");
     }
 

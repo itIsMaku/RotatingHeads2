@@ -2,7 +2,6 @@ package cz.gennario.newrotatingheads;
 
 import com.github.javafaker.Faker;
 import cz.gennario.newrotatingheads.developer.events.HeadReloadEvent;
-import cz.gennario.newrotatingheads.developer.events.HeadUnloadEvent;
 import cz.gennario.newrotatingheads.system.RotatingHead;
 import cz.gennario.newrotatingheads.utils.TextComponentUtils;
 import cz.gennario.newrotatingheads.utils.Utils;
@@ -18,6 +17,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
@@ -35,7 +35,7 @@ public class Command {
     private final CommandAPI command;
     private LanguageAPI language;
 
-    private Map<Player, String> headRemove = new HashMap<>();
+    private final Map<Player, String> headRemove = new HashMap<>();
 
     public Command() {
         document = Main.getInstance().getConfigFile().getYamlDocument();
@@ -150,7 +150,7 @@ public class Command {
                 .setDescription("Teleports to specific head")
                 .addArg("head", SubCommandArg.CommandArgType.REQUIRED, SubCommandArg.CommandArgValue.HEAD)
                 .addArg("player", SubCommandArg.CommandArgType.OPTIONAL, SubCommandArg.CommandArgValue.PLAYER)
-                .addArg("message", SubCommandArg.CommandArgType.OPTIONAL, SubCommandArg.CommandArgValue.STRING, Arrays.asList("--silent"))
+                .addArg("message", SubCommandArg.CommandArgType.OPTIONAL, SubCommandArg.CommandArgValue.STRING, Collections.singletonList("--silent"))
                 .setAllowConsoleSender(true)
                 .setResponse((commandSender, s, commandArgs) -> {
 
@@ -207,7 +207,7 @@ public class Command {
                 .setPermission("rh.create")
                 .setDescription("Creates new head")
                 .addArg("head", SubCommandArg.CommandArgType.REQUIRED, SubCommandArg.CommandArgValue.STRING, Arrays.asList(faker.app().name(), faker.app().name(), faker.app().name(), faker.app().name(), faker.app().name(), faker.app().name(), faker.app().name(), faker.app().name(), faker.app().name()))
-                .addArg("position", SubCommandArg.CommandArgType.OPTIONAL, SubCommandArg.CommandArgValue.STRING, Arrays.asList("--center"))
+                .addArg("position", SubCommandArg.CommandArgType.OPTIONAL, SubCommandArg.CommandArgValue.STRING, Collections.singletonList("--center"))
                 .setAllowConsoleSender(false)
                 .setResponse((commandSender, s, commandArgs) -> {
 
@@ -273,7 +273,7 @@ public class Command {
                 .setPermission("rh.delete")
                 .setDescription("Deletes head")
                 .addArg("head", SubCommandArg.CommandArgType.REQUIRED, SubCommandArg.CommandArgValue.HEAD)
-                .addArg("priority", SubCommandArg.CommandArgType.OPTIONAL, SubCommandArg.CommandArgValue.STRING, Arrays.asList("--force"))
+                .addArg("priority", SubCommandArg.CommandArgType.OPTIONAL, SubCommandArg.CommandArgValue.STRING, Collections.singletonList("--force"))
                 .setAllowConsoleSender(false)
                 .setResponse((commandSender, s, commandArgs) -> {
                     Player player = (Player) commandSender;
@@ -319,7 +319,7 @@ public class Command {
                 .setPermission("rh.movehere")
                 .setDescription("Move head to your location")
                 .addArg("head", SubCommandArg.CommandArgType.REQUIRED, SubCommandArg.CommandArgValue.HEAD)
-                .addArg("position", SubCommandArg.CommandArgType.OPTIONAL, SubCommandArg.CommandArgValue.STRING, Arrays.asList("--center"))
+                .addArg("position", SubCommandArg.CommandArgType.OPTIONAL, SubCommandArg.CommandArgValue.STRING, Collections.singletonList("--center"))
                 .setAllowConsoleSender(false)
                 .setResponse((commandSender, s, commandArgs) -> {
                     RotatingHead head = commandArgs[0].getAsHead();
@@ -367,65 +367,11 @@ public class Command {
                     switch (plugin) {
                         case "RH-REBORN":
                             File file = new File(Main.getInstance().getDataFolder().toString().replace("/RotatingHeads2", "") + "/RotatingHeads");
-                            if (file.exists()) {
-                                commandSender.sendMessage(language.getMessage("messages.convert.start",
-                                        null,
-                                        new Replacement((playe, string) -> string.replace("%type%", plugin))).toArray(new String[0]));
-
-                                File file1 = new File(file.getPath() + "/heads");
-                                List<File> files = new ArrayList<>();
-                                if (file1.exists()) {
-                                    listFiles(file1, files);
-                                }
-
-                                for (File file2 : files) {
-                                    try {
-                                        Files.copy(file2.toPath(), Paths.get(Main.getInstance().getDataFolder() + "/heads/" + file2.getName()), StandardCopyOption.REPLACE_EXISTING);
-                                        Utils.optiomizeConfiguration("/heads/" + file2.getName());
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                }
-
-                                commandSender.sendMessage(language.getMessage("messages.convert.transfer",
-                                        null,
-                                        new Replacement((playe, string) -> string.replace("%type%", plugin).replace("%time%", "" + (System.currentTimeMillis() - start)))).toArray(new String[0]));
-                            } else {
-                                commandSender.sendMessage(language.getMessage("messages.convert.no-files-found",
-                                        null,
-                                        new Replacement((playe, string) -> string.replace("%type%", plugin))).toArray(new String[0]));
-                            }
+                            convertPlugin(commandSender, plugin, start, file);
                             break;
                         case "RH-PRO":
                             File file2 = new File(Main.getInstance().getDataFolder().toString().replace("/RotatingHeads2", "") + "/RotatingHeadsPRO");
-                            if (file2.exists()) {
-                                commandSender.sendMessage(language.getMessage("messages.convert.start",
-                                        null,
-                                        new Replacement((playe, string) -> string.replace("%type%", plugin))).toArray(new String[0]));
-
-                                File file1 = new File(file2.getPath() + "/heads");
-                                List<File> files = new ArrayList<>();
-                                if (file1.exists()) {
-                                    listFiles(file1, files);
-                                }
-
-                                for (File file3 : files) {
-                                    try {
-                                        Files.copy(file3.toPath(), Paths.get(Main.getInstance().getDataFolder() + "/heads/" + file3.getName()), StandardCopyOption.REPLACE_EXISTING);
-                                        Utils.optiomizeConfiguration("/heads/" + file3.getName());
-                                    } catch (IOException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                }
-
-                                commandSender.sendMessage(language.getMessage("messages.convert.transfer",
-                                        null,
-                                        new Replacement((playe, string) -> string.replace("%type%", plugin).replace("%time%", "" + (System.currentTimeMillis() - start)))).toArray(new String[0]));
-                            } else {
-                                commandSender.sendMessage(language.getMessage("messages.convert.no-files-found",
-                                        null,
-                                        new Replacement((playe, string) -> string.replace("%type%", plugin))).toArray(new String[0]));
-                            }
+                            convertPlugin(commandSender, plugin, start, file2);
                             break;
                         default:
                             commandSender.sendMessage(language.getMessage("messages.convert.invalid-type",
@@ -434,6 +380,37 @@ public class Command {
                             break;
                     }
                 });
+    }
+
+    private void convertPlugin(CommandSender commandSender, String plugin, long start, File file) {
+        if (file.exists()) {
+            commandSender.sendMessage(language.getMessage("messages.convert.start",
+                    null,
+                    new Replacement((playe, string) -> string.replace("%type%", plugin))).toArray(new String[0]));
+
+            File file1 = new File(file.getPath() + "/heads");
+            List<File> files = new ArrayList<>();
+            if (file1.exists()) {
+                listFiles(file1, files);
+            }
+
+            for (File file2 : files) {
+                try {
+                    Files.copy(file2.toPath(), Paths.get(Main.getInstance().getDataFolder() + "/heads/" + file2.getName()), StandardCopyOption.REPLACE_EXISTING);
+                    Utils.optimizeConfiguration("/heads/" + file2.getName());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            commandSender.sendMessage(language.getMessage("messages.convert.transfer",
+                    null,
+                    new Replacement((playe, string) -> string.replace("%type%", plugin).replace("%time%", "" + (System.currentTimeMillis() - start)))).toArray(new String[0]));
+        } else {
+            commandSender.sendMessage(language.getMessage("messages.convert.no-files-found",
+                    null,
+                    new Replacement((playe, string) -> string.replace("%type%", plugin))).toArray(new String[0]));
+        }
     }
 
     public void listFiles(File file, List<File> files) {

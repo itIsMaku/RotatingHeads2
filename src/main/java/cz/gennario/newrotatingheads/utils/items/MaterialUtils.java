@@ -14,7 +14,7 @@ public final class MaterialUtils {
     }
 
     public static Material getAllVersionMaterial(String oldName, String newName) {
-        Material material = null;
+        Material material;
         try {
             material = Material.valueOf(oldName);
         } catch (Exception exception) {
@@ -24,7 +24,7 @@ public final class MaterialUtils {
     }
 
     public static ItemStack getAllVersionStack(String oldName, String newName, int data) {
-        Material material = null;
+        Material material;
         try {
             material = Material.valueOf(oldName);
         } catch (Exception exception) {

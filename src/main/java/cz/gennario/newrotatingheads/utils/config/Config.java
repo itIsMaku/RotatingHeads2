@@ -42,7 +42,6 @@ public class Config {
         this.plugin = plugin;
         this.path = path;
         this.name = name;
-        this.resource = resource;
 
         this.loaderSettings = LoaderSettings.builder().setAutoUpdate(true);
         this.updaterSettings = UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version"));
@@ -52,7 +51,6 @@ public class Config {
         this.plugin = plugin;
         this.path = path;
         this.name = name;
-        this.resource = resource;
         this.update = updater;
 
         this.loaderSettings = LoaderSettings.builder().setAutoUpdate(true);
@@ -62,7 +60,6 @@ public class Config {
     public Config(JavaPlugin plugin, String path) {
         this.plugin = plugin;
         this.path = path;
-        this.resource = resource;
 
         this.loaderSettings = LoaderSettings.builder().setAutoUpdate(true);
         this.updaterSettings = UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version"));
@@ -127,7 +124,7 @@ public class Config {
         } else {
             path = this.path + File.separator + name + ".yml";
         }
-        if(new File(plugin.getDataFolder()+"/"+path).exists()) {
+        if (new File(plugin.getDataFolder() + "/" + path).exists()) {
             if (!update) {
                 yamlDocument = YamlDocument.create(new File(plugin.getDataFolder(), path));
                 return;

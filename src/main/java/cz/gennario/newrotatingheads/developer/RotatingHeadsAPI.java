@@ -93,7 +93,7 @@ public class RotatingHeadsAPI {
 
     /**
      * "Get the head at the specified location, if it exists."
-     *
+     * <p>
      * The first thing we do is get the world of the location we're looking for. Then we loop through all the heads in the
      * plugin. If the world of the head matches the world of the location we're looking for, we check if the block
      * parameter is true. If it is, we clone the head's location and check if the block location of the clone matches the
@@ -102,8 +102,8 @@ public class RotatingHeadsAPI {
      * the end of the loop, we return null
      *
      * @param location The location of the block you want to get the head from.
-     * @param block If true, the method will check if the block at the location is the same as the block at the head's
-     * location. If false, it will check if the location is the same as the head's location.
+     * @param block    If true, the method will check if the block at the location is the same as the block at the head's
+     *                 location. If false, it will check if the location is the same as the head's location.
      * @return A RotatingHead object
      */
     public @Nullable RotatingHead getHeadByLocation(Location location, boolean block) {
@@ -112,14 +112,14 @@ public class RotatingHeadsAPI {
         for (RotatingHead head : getHeadsArray()) {
             World headWorld = head.getLocation().getWorld();
 
-            if(headWorld.equals(world)) {
-                if(block) {
+            if (headWorld.equals(world)) {
+                if (block) {
                     Location clone = head.getLocation().clone();
-                    if(clone.getBlock().getLocation().equals(location)) {
+                    if (clone.getBlock().getLocation().equals(location)) {
                         return head;
                     }
-                }else {
-                    if(head.getLocation().equals(location)) {
+                } else {
+                    if (head.getLocation().equals(location)) {
                         return head;
                     }
                 }
@@ -131,7 +131,7 @@ public class RotatingHeadsAPI {
     /**
      * Create a new RotatingHead object with the given name and location.
      *
-     * @param name The name of the head.
+     * @param name     The name of the head.
      * @param location The location of the head.
      * @return A RotatingHead object.
      */
@@ -144,10 +144,10 @@ public class RotatingHeadsAPI {
     /**
      * It creates a new RotatingHead object
      *
-     * @param name The name of the head. This is used to save the head to the config.
-     * @param location The location of the head.
+     * @param name      The name of the head. This is used to save the head to the config.
+     * @param location  The location of the head.
      * @param useConfig If true, the head will use the config file to determine the rotation speed. If false, the head will
-     * use the default rotation speed.
+     *                  use the default rotation speed.
      * @return A new RotatingHead object.
      */
     public RotatingHead createRotatingHead(String name, @Nullable Location location, boolean useConfig) {
@@ -159,8 +159,8 @@ public class RotatingHeadsAPI {
     /**
      * It creates a new RotatingHead object, sets the head type to STAND, and returns the RotatingHead object
      *
-     * @param name The name of the head. This is used to identify the head.
-     * @param location The location of the head.
+     * @param name      The name of the head. This is used to identify the head.
+     * @param location  The location of the head.
      * @param useConfig If true, the head will use the config file to determine the head's rotation speed.
      * @return A RotatingHead object.
      */
@@ -175,10 +175,10 @@ public class RotatingHeadsAPI {
      * Create a new rotating head with the name `name`, at the location `location`, with the entity type `entityType`, and
      * use the config if `useConfig` is true
      *
-     * @param name The name of the head. This is used to identify the head.
-     * @param location The location of the head.
+     * @param name       The name of the head. This is used to identify the head.
+     * @param location   The location of the head.
      * @param entityType The entity type of the head.
-     * @param useConfig Whether or not to use the config file for the head.
+     * @param useConfig  Whether to use the config file for the head.
      * @return A RotatingHead object.
      */
     public RotatingHead createEntityRotatingHead(String name, @Nullable Location location, EntityType entityType, boolean useConfig) {

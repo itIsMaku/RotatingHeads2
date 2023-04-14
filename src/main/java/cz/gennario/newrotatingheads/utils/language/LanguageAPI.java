@@ -188,8 +188,7 @@ public class LanguageAPI {
         for (File f : file.listFiles()) {
             if(f.getName().replace(".yml", "").equals("name")) return true;
         }
-        if(languages.keySet().contains(name)) return true;
-        return false;
+        return languages.keySet().contains(name);
     }
 
     public void reloadLanguages() {

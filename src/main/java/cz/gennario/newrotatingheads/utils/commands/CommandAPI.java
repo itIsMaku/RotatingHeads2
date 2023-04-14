@@ -118,10 +118,10 @@ public class CommandAPI {
             PluginCommand pluginCommand = constructor.newInstance(name, plugin);
             pluginCommand.setExecutor((sender, cmd, label, args) -> {
                 if (args.length == 0) {
-                    if(permission != null && !permission.isEmpty()) {
+                    if (permission != null && !permission.isEmpty()) {
                         boolean hasPermission = false;
                         for (String s1 : permission) {
-                            if(sender.hasPermission(s1)) {
+                            if (sender.hasPermission(s1)) {
                                 hasPermission = true;
                             }
                         }
@@ -131,9 +131,7 @@ public class CommandAPI {
                         }
                     }
                     if (help && emptyCommandResponse == null) {
-                        sender.sendMessage(languageAPI.getMessage("commands.usage", null, new Replacement((player, string) -> {
-                            return string.replace("%label%", label).replace("%help%", "help [page]");
-                        })).toArray(new String[0]));
+                        sender.sendMessage(languageAPI.getMessage("commands.usage", null, new Replacement((player, string) -> string.replace("%label%", label).replace("%help%", "help [page]"))).toArray(new String[0]));
                         return true;
                     } else if (emptyCommandResponse != null) {
                         emptyCommandResponse.cmd(sender, label, null);
@@ -149,7 +147,7 @@ public class CommandAPI {
                             if (command.getPermission() != null) {
                                 boolean hasPermission = false;
                                 for (String s1 : command.getPermission()) {
-                                    if(sender.hasPermission(s1)) {
+                                    if (sender.hasPermission(s1)) {
                                         hasPermission = true;
                                     }
                                 }
@@ -211,9 +209,7 @@ public class CommandAPI {
                                             break;
                                     }
                                     if (!correctType) {
-                                        sender.sendMessage(languageAPI.getMessage("commands.invalid-usage", null, new Replacement((player, string) -> {
-                                            return string.replace("%value%", commandArg.getName());
-                                        })).toArray(new String[0]));
+                                        sender.sendMessage(languageAPI.getMessage("commands.invalid-usage", null, new Replacement((player, string) -> string.replace("%value%", commandArg.getName()))).toArray(new String[0]));
                                         return false;
                                     }
 
@@ -222,9 +218,7 @@ public class CommandAPI {
                             }
 
                             if (required > commandArgs.size() || (commandArgs.isEmpty() && required != 0) || commandArgs.size() > command.getSubCommandArgs().size()) {
-                                sender.sendMessage(languageAPI.getMessage("commands.usage", null, new Replacement((player, string) -> {
-                                    return string.replace("%label%", label).replace("%help%", command.getUsage());
-                                })).toArray(new String[0]));
+                                sender.sendMessage(languageAPI.getMessage("commands.usage", null, new Replacement((player, string) -> string.replace("%label%", label).replace("%help%", command.getUsage()))).toArray(new String[0]));
                                 return true;
                             }
 

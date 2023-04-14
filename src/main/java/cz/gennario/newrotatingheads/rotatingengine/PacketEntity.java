@@ -1,7 +1,10 @@
 package cz.gennario.newrotatingheads.rotatingengine;
 
 import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.wrappers.*;
+import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.comphenix.protocol.wrappers.Pair;
+import com.comphenix.protocol.wrappers.WrappedChatComponent;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import cz.gennario.newrotatingheads.utils.Utils;
 import lombok.Getter;
 import org.bukkit.Location;
@@ -16,8 +19,6 @@ import java.util.*;
 public class PacketEntity {
 
     private final int entityId;
-    
-    
     private EntityType entityType;
     private boolean crouching, invisible, glowing, elytraFlying, showName, silent, noGravity;
     private String name;
@@ -32,7 +33,7 @@ public class PacketEntity {
         this.entityId = PacketUtils.generateRandomEntityId();
 
         this.entityType = EntityType.PIG;
-        
+
         this.invisible = false;
         this.crouching = false;
         this.glowing = false;
@@ -56,21 +57,21 @@ public class PacketEntity {
         WrappedDataWatcher dataWatcher = PacketUtils.getDataWatcher();
 
         byte flags = 0;
-        if(isCrouching()) {
+        if (isCrouching()) {
             flags += (byte) 0x02;
         }
-        if(isInvisible()) {
+        if (isInvisible()) {
             flags += (byte) 0x20;
         }
-        if(isGlowing()) {
+        if (isGlowing()) {
             flags += (byte) 0x40;
         }
-        if(isElytraFlying()) {
+        if (isElytraFlying()) {
             flags += (byte) 0x80;
         }
-        PacketUtils.setMetadata(dataWatcher, 0, Byte.class, (byte) flags);
-        
-        if(!Objects.equals(this.name, "")) {
+        PacketUtils.setMetadata(dataWatcher, 0, Byte.class, flags);
+
+        if (!Objects.equals(this.name, "")) {
             Optional<?> opt = Optional.of(WrappedChatComponent.fromChatMessage(Utils.colorize(player, this.name))[0].getHandle());
             PacketUtils.setMetadata(dataWatcher, 2, WrappedDataWatcher.Registry.getChatComponentSerializer(true), opt);
         }

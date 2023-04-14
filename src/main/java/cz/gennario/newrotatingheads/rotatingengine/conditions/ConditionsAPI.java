@@ -71,25 +71,25 @@ public class ConditionsAPI {
     }
 
     public boolean check(Player player, Section section, @Nullable Replacement replacement) {
-        if(replacement == null) replacement = new Replacement((player1, string) -> string);
+        if (replacement == null) replacement = new Replacement((player1, string) -> string);
 
         boolean negative = false;
         String type = section.getString("type").toLowerCase();
-        if(type.startsWith("!")) {
+        if (type.startsWith("!")) {
             type = type.replaceFirst("!", "");
             negative = true;
         }
         String input = Utils.colorize(player, replacement.replace(player, section.getString("input", "null")));
         String output = section.getString("output", "null");
 
-        if(!conditions.containsKey(type)) {
-            System.out.println("Condition "+type+" doesn't exist!");
+        if (!conditions.containsKey(type)) {
+            System.out.println("Condition " + type + " doesn't exist!");
             return false;
         }
 
         Condition condition = conditions.get(type);
 
-        if(negative) {
+        if (negative) {
             return !condition.getConditionResponse().check(input, output, player, replacement);
         }
 
@@ -97,14 +97,14 @@ public class ConditionsAPI {
     }
 
     public boolean check(Player player, ConditionValue conditionValue, @Nullable Replacement replacement) {
-        if(replacement == null) replacement = new Replacement((player1, string) -> string);
+        if (replacement == null) replacement = new Replacement((player1, string) -> string);
 
         String input = Utils.colorize(player, Utils.colorize(player, conditionValue.getInput()));
         String output = conditionValue.getOutput();
 
         Condition condition = conditionValue.getCondition();
 
-        if(conditionValue.isNegative()) {
+        if (conditionValue.isNegative()) {
             return !condition.getConditionResponse().check(input, output, player, replacement);
         }
 

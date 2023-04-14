@@ -54,7 +54,7 @@ public final class HeadManager {
         SkullMeta meta = (SkullMeta) head.getItemMeta();
         GameProfile profile = new GameProfile(UUID.randomUUID(), "");
         profile.getProperties().put("textures", new Property("textures", url));
-        Field profileField = null;
+        Field profileField;
         try {
             profileField = meta.getClass().getDeclaredField("profile");
             profileField.setAccessible(true);
@@ -90,7 +90,7 @@ public final class HeadManager {
         try {
             URL url = new URL(urlString);
             reader = new BufferedReader(new InputStreamReader(url.openStream()));
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             int read;
             char[] chars = new char[1024];
             while ((read = reader.read(chars)) != -1) buffer.append(chars, 0, read);
@@ -118,7 +118,7 @@ public final class HeadManager {
     }
 
     private static ItemStack getAllVersionStack(String oldName, String newName, int data) {
-        Material material = null;
+        Material material;
         try {
             material = Material.valueOf(oldName);
         } catch (Exception exception) {

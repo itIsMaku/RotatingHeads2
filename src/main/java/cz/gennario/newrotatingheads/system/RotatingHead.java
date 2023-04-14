@@ -6,18 +6,17 @@ import cz.gennario.newrotatingheads.Main;
 import cz.gennario.newrotatingheads.developer.events.*;
 import cz.gennario.newrotatingheads.rotatingengine.HeadEquipmentValue;
 import cz.gennario.newrotatingheads.rotatingengine.PacketArmorStand;
-import cz.gennario.newrotatingheads.system.animations.AnimationData;
-import cz.gennario.newrotatingheads.system.animations.AnimationLoader;
-import cz.gennario.newrotatingheads.system.animations.HeadAnimationExtender;
 import cz.gennario.newrotatingheads.rotatingengine.PacketEntity;
 import cz.gennario.newrotatingheads.rotatingengine.holograms.Hologram;
 import cz.gennario.newrotatingheads.rotatingengine.holograms.providers.PrivateHologramProvider;
+import cz.gennario.newrotatingheads.system.animations.AnimationData;
+import cz.gennario.newrotatingheads.system.animations.AnimationLoader;
+import cz.gennario.newrotatingheads.system.animations.HeadAnimationExtender;
 import cz.gennario.newrotatingheads.utils.Utils;
 import cz.gennario.newrotatingheads.utils.config.Config;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
@@ -86,8 +85,8 @@ public class RotatingHead {
             }
         }.runTask(Main.getInstance());
 
-        if(loadEvent.isCancelled()) {
-            if(Main.getInstance().getHeads().containsKey(name)) Main.getInstance().getHeads().remove(name);
+        if (loadEvent.isCancelled()) {
+            Main.getInstance().getHeads().remove(name);
             return;
         }
 
@@ -102,9 +101,9 @@ public class RotatingHead {
             this.yamlDocument = config.getYamlDocument();
         }
 
-        if(location != null) {
+        if (location != null) {
             this.location = location.clone();
-        }else {
+        } else {
             this.location = Utils.getLocation(yamlDocument.getString("settings.location"));
         }
         this.lastlocation = this.location;
@@ -127,7 +126,7 @@ public class RotatingHead {
 
         // DEFAULT HEAD SETTINGS
         viewDistance = 30;
-        equipment = Arrays.asList();
+        equipment = Collections.emptyList();
     }
 
     public void updateHead() {
@@ -191,10 +190,10 @@ public class RotatingHead {
 
         AnimationLoader animationLoader = Main.getInstance().getAnimationLoader();
         this.animations = new ArrayList<>();
-        if(yamlDocument.contains("settings.animations")) {
+        if (yamlDocument.contains("settings.animations")) {
             for (String animation : yamlDocument.getSection("settings.animations").getRoutesAsStrings(false)) {
                 animation = animation.toLowerCase(Locale.ROOT);
-                if(animationLoader.animations.containsKey(animation)) {
+                if (animationLoader.animations.containsKey(animation)) {
                     AnimationData animationData = animationLoader.animations.get(animation);
                     HeadAnimationExtender extender = animationData.getExtender(yamlDocument.getSection("settings.animations." + animation));
                     this.animations.add(extender);
@@ -203,7 +202,7 @@ public class RotatingHead {
         }
 
         List<Pair<EnumWrappers.ItemSlot, HeadEquipmentValue>> items = new ArrayList<>();
-        if(yamlDocument.contains("equipment")) {
+        if (yamlDocument.contains("equipment")) {
             for (String slot : yamlDocument.getSection("equipment").getRoutesAsStrings(false)) {
                 EnumWrappers.ItemSlot itemSlot = EnumWrappers.ItemSlot.valueOf(slot);
                 HeadEquipmentValue headEquipmentValue = new HeadEquipmentValue(HeadEquipmentValue.HeadEquipmentType.CONFIG);
@@ -214,34 +213,34 @@ public class RotatingHead {
         this.equipment = items;
 
         List<String> rotationTypes = Arrays.asList("HEAD", "BODY", "LEFT_ARM", "RIGHT_ARM", "LEFT_LEG", "RIGHT_LEG");
-        if(yamlDocument.contains("positions")) {
+        if (yamlDocument.contains("positions")) {
             for (String slot : yamlDocument.getSection("positions").getRoutesAsStrings(false)) {
-                if(rotationTypes.contains(slot.toUpperCase(Locale.ROOT))) {
+                if (rotationTypes.contains(slot.toUpperCase(Locale.ROOT))) {
                     switch (slot.toUpperCase(Locale.ROOT)) {
                         case "HEAD":
-                            headRotation = getBodyPartsRotation(yamlDocument.getSection("positions."+slot));
+                            headRotation = getBodyPartsRotation(yamlDocument.getSection("positions." + slot));
                             break;
                         case "BODY":
-                            bodyRotation = getBodyPartsRotation(yamlDocument.getSection("positions."+slot));
+                            bodyRotation = getBodyPartsRotation(yamlDocument.getSection("positions." + slot));
                             break;
                         case "LEFT_ARM":
-                            leftArmRotation = getBodyPartsRotation(yamlDocument.getSection("positions."+slot));
+                            leftArmRotation = getBodyPartsRotation(yamlDocument.getSection("positions." + slot));
                             break;
                         case "RIGHT_ARM":
-                            rightArmRotation = getBodyPartsRotation(yamlDocument.getSection("positions."+slot));
+                            rightArmRotation = getBodyPartsRotation(yamlDocument.getSection("positions." + slot));
                             break;
                         case "LEFT_LEG":
-                            leftLegRotation = getBodyPartsRotation(yamlDocument.getSection("positions."+slot));
+                            leftLegRotation = getBodyPartsRotation(yamlDocument.getSection("positions." + slot));
                             break;
                         case "RIGHT_LEG":
-                            rightLegRotation = getBodyPartsRotation(yamlDocument.getSection("positions."+slot));
+                            rightLegRotation = getBodyPartsRotation(yamlDocument.getSection("positions." + slot));
                             break;
                     }
                 }
             }
         }
 
-        if(yamlDocument.contains("hologram")) {
+        if (yamlDocument.contains("hologram")) {
             double space = yamlDocument.getDouble("hologram.space", 0.25);
             double xOffset = yamlDocument.getDouble("hologram.offset.x", 0.0);
             double yOffset = yamlDocument.getDouble("hologram.offset.y", 0.0);
@@ -251,8 +250,8 @@ public class RotatingHead {
             boolean updateLines = yamlDocument.getBoolean("hologram.update-lines", true);
             int updateLinesTime = yamlDocument.getInt("hologram.update-lines-time", 100);
             List<String> lines = yamlDocument.getStringList("hologram.lines");
-            if(lines != null) {
-                this.hologram = new Hologram(this, new PrivateHologramProvider(name+"-hologram", this));
+            if (lines != null) {
+                this.hologram = new Hologram(this, new PrivateHologramProvider(name + "-hologram", this));
                 this.hologram.create(space, xOffset, yOffset, zOffset, attachBottom, lines);
                 this.hologram.setUpdateLines(updateLines);
                 this.hologram.setUpdateLinesTime(updateLinesTime);
@@ -277,7 +276,7 @@ public class RotatingHead {
             }
         }.runTask(Main.getInstance());
 
-        if(loadEvent.isCancelled()) {
+        if (loadEvent.isCancelled()) {
             return;
         }
 
@@ -290,7 +289,7 @@ public class RotatingHead {
                     packetEntity.spawn(player);
                     break;
             }
-            if(hologram != null) {
+            if (hologram != null) {
                 hologram.getPrivateHologramProvider().spawn(player);
             }
             players.add(player);
@@ -298,7 +297,7 @@ public class RotatingHead {
     }
 
     public void deleteHead(boolean event) {
-        if(event) {
+        if (event) {
             HeadUnloadEvent loadEvent = new HeadUnloadEvent(this, false);
             new BukkitRunnable() {
                 @Override
@@ -315,17 +314,21 @@ public class RotatingHead {
         Main.getInstance().getHeads().remove(name);
         headStatus = HeadStatus.DISABLED;
         for (Player player : location.getWorld().getPlayers()) {
-            switch (headType) {
-                case STAND:
-                    packetArmorStand.delete(player);
-                    break;
-                case ENTITY:
-                    packetEntity.delete(player);
-                    break;
-            }
-            if(hologram != null) {
-                hologram.getPrivateHologramProvider().despawn(player);
-            }
+            deleteHeadType(player);
+        }
+    }
+
+    private void deleteHeadType(Player player) {
+        switch (headType) {
+            case STAND:
+                packetArmorStand.delete(player);
+                break;
+            case ENTITY:
+                packetEntity.delete(player);
+                break;
+        }
+        if (hologram != null) {
+            hologram.getPrivateHologramProvider().despawn(player);
         }
     }
 
@@ -338,22 +341,12 @@ public class RotatingHead {
             }
         }.runTask(Main.getInstance());
 
-        if(loadEvent.isCancelled()) {
+        if (loadEvent.isCancelled()) {
             return;
         }
 
         if (players.contains(player)) {
-            switch (headType) {
-                case STAND:
-                    packetArmorStand.delete(player);
-                    break;
-                case ENTITY:
-                    packetEntity.delete(player);
-                    break;
-            }
-            if(hologram != null) {
-                hologram.getPrivateHologramProvider().despawn(player);
-            }
+            deleteHeadType(player);
             players.remove(player);
         }
     }
@@ -361,16 +354,19 @@ public class RotatingHead {
     public void checkActions(Player player, HeadInteraction.HeadClickType headClickType) {
         if (yamlDocument.contains("actions")) {
             for (String clickType : yamlDocument.getSection("actions").getRoutesAsStrings(false)) {
-                if(clickType.contains("+")) {
+                if (clickType.contains("+")) {
                     boolean contain = false;
                     for (String s : clickType.split("\\+")) {
-                        if(s.equals(headClickType.name())) contain = true;
+                        if (s.equals(headClickType.name())) {
+                            contain = true;
+                            break;
+                        }
                     }
-                    if(contain) {
+                    if (contain) {
                         Section section = yamlDocument.getSection("actions." + clickType);
                         Main.getInstance().getActionsAPI().useAction(player, section);
                     }
-                }else if(clickType.toUpperCase().equals(headClickType.name()) || clickType.equalsIgnoreCase("ALL")) {
+                } else if (clickType.toUpperCase().equals(headClickType.name()) || clickType.equalsIgnoreCase("ALL")) {
                     Section section = yamlDocument.getSection("actions." + clickType);
                     Main.getInstance().getActionsAPI().useAction(player, section);
                 }
@@ -391,7 +387,7 @@ public class RotatingHead {
             }
         }.runTask(Main.getInstance());
 
-        if(loadEvent.isCancelled()) {
+        if (loadEvent.isCancelled()) {
             return;
         }
 
@@ -409,14 +405,14 @@ public class RotatingHead {
                         break;
                 }
 
-                if(hologram != null) {
+                if (hologram != null) {
                     hologram.updateLines(player, false);
                 }
             }
-            if(hologram != null) {
+            if (hologram != null) {
                 hologram.move();
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
 
         }
     }

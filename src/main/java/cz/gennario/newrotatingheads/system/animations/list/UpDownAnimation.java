@@ -10,9 +10,11 @@ import java.util.List;
 
 public class UpDownAnimation extends HeadAnimationExtender {
 
-    private int jumps, jumped, direction;
-    private double jump;
-    private boolean smooth;
+    private final int jumps;
+    private int jumped;
+    private int direction;
+    private final double jump;
+    private final boolean smooth;
     private int cooldown;
     private List<Double> smoothJumps;
 
@@ -21,25 +23,25 @@ public class UpDownAnimation extends HeadAnimationExtender {
         this.jump = jump;
         this.jumps = jumps;
         this.smooth = smooth;
-        this.cooldown =  cooldown;
+        this.cooldown = cooldown;
         jumped = 0;
         direction = 0;
 
         smoothJumps = new ArrayList<>();
 
-        List<Double> doubles = calculateSmoothMovement(jump, jumps/2);
+        List<Double> doubles = calculateSmoothMovement(jump, jumps / 2);
         Collections.reverse(doubles);
-        doubles.addAll(calculateSmoothMovement(jump, jumps/2));
+        doubles.addAll(calculateSmoothMovement(jump, jumps / 2));
         smoothJumps = doubles;
     }
 
     @Override
     public Location pingLocation(RotatingHead rotatingHead) {
 
-        if(cooldown < 0) {
+        if (cooldown < 0) {
             cooldown++;
             return rotatingHead.getLastlocation();
-        }else {
+        } else {
             cooldown = 0;
         }
 
@@ -63,18 +65,18 @@ public class UpDownAnimation extends HeadAnimationExtender {
             jumped++;
         } else {
             if (direction == 0) {
-                if(jumped >= smoothJumps.size()) {
+                if (jumped >= smoothJumps.size()) {
                     direction = 1;
-                    location.add(0, -smoothJumps.get(jumped-1), 0);
-                }else {
+                    location.add(0, -smoothJumps.get(jumped - 1), 0);
+                } else {
                     location.add(0, smoothJumps.get(jumped), 0);
                     jumped++;
                 }
             } else if (direction == 1) {
-                if(jumped <= 0) {
+                if (jumped <= 0) {
                     direction = 0;
                     location.add(0, smoothJumps.get(jumped), 0);
-                }else {
+                } else {
                     jumped--;
                     location.add(0, -smoothJumps.get(jumped), 0);
                 }
@@ -87,16 +89,16 @@ public class UpDownAnimation extends HeadAnimationExtender {
     public List<Double> calculateSmoothMovement(double jump, int halfJumps) {
         List<Double> jumps = new ArrayList<>();
 
-        double trajectory = halfJumps*jump;
-        double normalTrajectory = trajectory-(trajectory/4);
-        double normalJump = normalTrajectory/(halfJumps-(halfJumps/2));
+        double trajectory = halfJumps * jump;
+        double normalTrajectory = trajectory - (trajectory / 4);
+        double normalJump = normalTrajectory / (halfJumps - (halfJumps / 2));
 
         int ii = 1;
         for (int i = 0; i < halfJumps; i++) {
-            if((i+1) >= (halfJumps-(halfJumps/2))) {
-                jumps.add(normalJump/ii);
+            if ((i + 1) >= (halfJumps - (halfJumps / 2))) {
+                jumps.add(normalJump / ii);
                 ii++;
-            }else {
+            } else {
                 jumps.add(normalJump);
             }
         }

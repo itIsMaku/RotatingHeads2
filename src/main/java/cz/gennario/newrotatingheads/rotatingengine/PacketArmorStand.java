@@ -3,11 +3,7 @@ package cz.gennario.newrotatingheads.rotatingengine;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.*;
 import cz.gennario.newrotatingheads.utils.Utils;
-import cz.gennario.newrotatingheads.utils.items.ItemSystem;
-import cz.gennario.newrotatingheads.utils.replacement.Replacement;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -70,7 +66,7 @@ public class PacketArmorStand {
             }
             if (Utils.versionIsAfter(16)) {
                 PacketUtils.setMetadata(dataWatcher, 15, Byte.class, flags);
-            }else if(Utils.versionIsAfterOrEqual(15)) {
+            } else if (Utils.versionIsAfterOrEqual(15)) {
                 PacketUtils.setMetadata(dataWatcher, 14, Byte.class, flags);
             } else {
                 PacketUtils.setMetadata(dataWatcher, 11, Byte.class, flags);

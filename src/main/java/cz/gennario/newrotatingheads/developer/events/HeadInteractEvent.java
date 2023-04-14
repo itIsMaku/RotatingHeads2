@@ -1,6 +1,5 @@
 package cz.gennario.newrotatingheads.developer.events;
 
-import com.comphenix.protocol.PacketType;
 import cz.gennario.newrotatingheads.system.HeadInteraction;
 import lombok.Getter;
 import lombok.Setter;

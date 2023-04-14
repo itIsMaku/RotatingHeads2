@@ -10,7 +10,6 @@ import com.comphenix.protocol.wrappers.WrappedDataValue;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -44,9 +43,9 @@ public final class PacketUtils {
         // Entity Type
         try {
             packet.getEntityTypeModifier().write(0, entityType);
-        }catch (Exception e) {
+        } catch (Exception e) {
             // Entity Type
-            if(entityType.equals(EntityType.ARMOR_STAND)) {
+            if (entityType.equals(EntityType.ARMOR_STAND)) {
                 packet.getIntegers().write(6, 78);
             } else packet.getIntegers().write(6, (int) entityType.getTypeId());
             // Set optional velocity (/8000)
@@ -68,7 +67,7 @@ public final class PacketUtils {
         try {
             packet.getBytes().write(0, (byte) location.getPitch());
             packet.getBytes().write(1, (byte) location.getYaw());
-        }catch (Exception e) {
+        } catch (Exception e) {
         }
 
         // Set UUID
@@ -102,7 +101,7 @@ public final class PacketUtils {
         }
     }
 
-    public static WrappedDataWatcher setMetadata(WrappedDataWatcher watcher, int index, Class c, Object value) {
+    public static WrappedDataWatcher setMetadata(WrappedDataWatcher watcher, int index, Class<?> c, Object value) {
         try {
             watcher.setObject(new WrappedDataWatcher.WrappedDataWatcherObject(index, WrappedDataWatcher.Registry.get(c)), value);
         } catch (Exception e) {
@@ -158,8 +157,8 @@ public final class PacketUtils {
             packet.getModifier().writeDefaults();
             try {
                 packet.getIntLists().write(0, entityIDList);
-            }catch (Exception e) {
-                packet.getIntegerArrays().write(0, entityIDList.stream().mapToInt(i->i).toArray());
+            } catch (Exception e) {
+                packet.getIntegerArrays().write(0, entityIDList.stream().mapToInt(i -> i).toArray());
             }
 
             return packet;
@@ -196,7 +195,7 @@ public final class PacketUtils {
         }
     }
 
-    public static PacketContainer getPassengerPacket(int vehicleId, int passengerCount, int... passengers) {
+    public static PacketContainer getPassengerPacket(int vehicleId, int... passengers) {
         try {
             PacketContainer pc = protocolManager.createPacket(PacketType.Play.Server.MOUNT);
 
@@ -204,7 +203,7 @@ public final class PacketUtils {
             pc.getIntegerArrays().write(0, passengers);
 
             return pc;
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

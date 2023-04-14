@@ -61,10 +61,7 @@ public class CommandArg {
     public boolean isOfflinePlayer() {
         if (Bukkit.getPlayer(arg) != null) {
             return true;
-        }else if(Bukkit.getOfflinePlayer(arg).hasPlayedBefore()) {
-            return true;
-        }
-        return false;
+        } else return Bukkit.getOfflinePlayer(arg).hasPlayedBefore();
     }
 
     public boolean isEntity() {

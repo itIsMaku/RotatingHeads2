@@ -6,7 +6,6 @@ import cz.gennario.newrotatingheads.utils.centermessage.CenterMessage;
 import cz.gennario.newrotatingheads.utils.config.Config;
 import cz.gennario.newrotatingheads.utils.iridiumcolorapi.IridiumColorAPI;
 import dev.dejvokep.boostedyaml.YamlDocument;
-import dev.dejvokep.boostedyaml.block.implementation.Section;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -17,7 +16,6 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BinaryOperator;
 
 public final class Utils {
 
@@ -48,27 +46,8 @@ public final class Utils {
     public static List<String> colorize(Player player, String... strings) {
         List<String> list = new ArrayList<>();
         for (String string : strings) {
-            String playerName = "%player%";
-            if (player != null && player.isOnline()) playerName = player.getName();
-            string = string.replace("%player%", playerName);
-
-            String s = string;
-            if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-                if (player != null && player.isOnline()) {
-                    s = PlaceholderAPI.setPlaceholders(player, string);
-                } else {
-                    s = PlaceholderAPI.setPlaceholders(null, string);
-                }
-            }
-            s = s.replace("§l", "&l");
-            s = IridiumColorAPI.process(s);
-
-            if (s.startsWith("<center>")) {
-                s = CenterMessage.getCenteredMessage(s.replaceFirst("<center>", ""));
-            }
-            list.add(s);
+            list.add(colorize(player, string));
         }
-
         return list;
     }
 
@@ -132,7 +111,7 @@ public final class Utils {
         return loc;
     }
 
-    public static void optiomizeConfiguration(String path) {
+    public static void optimizeConfiguration(String path) {
         Config config = new Config(Main.getInstance(), path);
         try {
             config.load();

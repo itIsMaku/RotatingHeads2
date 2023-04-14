@@ -1,8 +1,8 @@
 package cz.gennario.newrotatingheads.rotatingengine.holograms.providers;
 
-import cz.gennario.newrotatingheads.system.RotatingHead;
 import cz.gennario.newrotatingheads.rotatingengine.PacketArmorStand;
 import cz.gennario.newrotatingheads.rotatingengine.holograms.HologramExtender;
+import cz.gennario.newrotatingheads.system.RotatingHead;
 import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -15,8 +15,8 @@ import java.util.Map;
 @Getter
 public class PrivateHologramProvider extends HologramExtender {
 
-    private Map<Integer, PacketArmorStand> lines;
-    private List<Player> players;
+    private final Map<Integer, PacketArmorStand> lines;
+    private final List<Player> players;
     private double space;
     private boolean attachBottom;
 
@@ -33,7 +33,7 @@ public class PrivateHologramProvider extends HologramExtender {
 
         location = location.clone();
 
-        location.setY(location.getY()+(lines.size()*space));
+        location.setY(location.getY() + (lines.size() * space));
 
         int lineNumber = 0;
         for (String line : lines) {
@@ -47,7 +47,7 @@ public class PrivateHologramProvider extends HologramExtender {
 
             this.lines.put(lineNumber, packetArmorStand);
 
-            location.setY(location.getY()-space);
+            location.setY(location.getY() - space);
             lineNumber++;
         }
     }
@@ -63,7 +63,7 @@ public class PrivateHologramProvider extends HologramExtender {
 
     @Override
     public void moveHologram(Location location) {
-        if(!attachBottom) {
+        if (!attachBottom) {
             for (int i = 0; i < lines.values().size(); i++) {
                 location.add(0, space, 0);
             }
@@ -89,7 +89,7 @@ public class PrivateHologramProvider extends HologramExtender {
     @Override
     public void spawn(Player player) {
         for (PacketArmorStand packetArmorStand : lines.values()) {
-            if(!packetArmorStand.getName().equals("")) {
+            if (!packetArmorStand.getName().equals("")) {
                 packetArmorStand.spawn(player);
             }
         }

@@ -42,7 +42,7 @@ public class HeadInteraction {
                 }
                 boolean isShift = packet.getBooleans().readSafely(0); // Check if player is crouching
 
-                HeadClickType headClickType = null;
+                HeadClickType headClickType;
 
                 switch (action.compareTo(EnumWrappers.EntityUseAction.INTERACT)) {
                     case 1: // LEFT CLICK
